@@ -22,7 +22,7 @@ export class WdObject {
 
   }
 
-  get (key) {
+  get (key: string) {
     return this.val[key]
   }
 

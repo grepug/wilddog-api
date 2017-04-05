@@ -1,7 +1,7 @@
 import wilddog = require('wilddog')
 import { Query, WdObject } from './index'
 
-declare const Promise
+declare const Promise: any
 
 interface Config {
   syncURL: string,
@@ -11,8 +11,8 @@ interface Config {
 export class WilddogApi {
 
   private config: Config
-  public wilddog
-  public sync
+  public wilddog: any
+  public sync: any
 
   constructor (
     config: Config,

@@ -1,15 +1,19 @@
 {
-  "name": "wilddog-api",
+  "name": "@grepug/wilddog-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/wilddog-api.amd.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "author": "GrePuG",
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.4",
     "wilddog": "^2.5.4"
+  },
+  "devDependencies": {
+    "typescript": "^2.2.2"
   }
 }

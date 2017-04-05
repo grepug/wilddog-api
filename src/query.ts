@@ -6,7 +6,7 @@ import {
 } from './libs/util'
 import _ = require('lodash')
 
-declare const Promise
+declare const Promise: any
 
 interface QueryOptions {
   wilddog: WilddogApi,
@@ -31,7 +31,7 @@ interface EqualTo {
 export class Query {
 
   private wilddog: WilddogApi
-  private sync
+  private sync: any
   private path: string[]
   private relationClassName: string
   private relationName: string
