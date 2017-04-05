@@ -51,10 +51,10 @@ export class Query {
   }
 
   get (key: string): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise((resolve: Function) => {
       let path = this.path.join('/')
       let ref = this.sync.ref(path).orderByChild(key)
-      ref.once('value', ss => {
+      ref.once('value', (ss: any) => {
         let key = ss.key()
         let val = ss.val()
         let wdObject = new WdObject(this.path, val, this.wilddog)
@@ -64,7 +64,7 @@ export class Query {
     })
   }
 
-  equalTo (key, val): Query {
+  equalTo (key: string, val: string): Query {
     if (this.isRelation) {
       warn('relation 暂不支持 equalTo')
     } else {
@@ -80,19 +80,19 @@ export class Query {
       return this.wilddog.Query(this.path.concat([relationName])).first()
       .then(res => {
         let keys: any = res.val
-        let p = _.map(keys, (key) => {
+        let p = _.map(keys, (key: string) => {
           return this.wilddog.Query([this.relationClassName]).get(key)
         })
         return Promise.all(p)
       })
     }
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
       let path = this.path.join('/')
       let ref = this.sync.ref(path)
       if (this.queryObj.equalTo) {
         ref = ref.orderByChild(this.queryObj.equalTo.key)
       }
-      ref.once('value', ss => {
+      ref.once('value', (ss: any) => {
         let key = ss.key()
         let val = ss.val()
         let wdObject = new WdObject(this.path, val, this.wilddog)
@@ -111,7 +111,7 @@ export class Query {
     if (this.queryObj.equalTo) {
       ref = ref.orderByChild(this.queryObj.equalTo.key)
     }
-    ref.on(method, ss => {
+    ref.on(method, (ss: any) => {
       let key = ss.key()
       let val = ss.val()
       let wdObject = new WdObject(this.path, val, this.wilddog)

@@ -3,7 +3,7 @@ import {
   toArray
 } from './libs/util'
 
-declare const Promise
+declare const Promise: any
 
 interface RelationOptions {
   wilddog: WilddogApi,
@@ -35,7 +35,6 @@ export class Relation {
   add (objs: WdObject[] | WdObject): Promise<any> {
     let path = this.path.join('/')
     objs = toArray(objs)
-    // if (objs.reduce((x, y) => x.path[0] === y.path[0]))
     let promises = objs.map(obj => {
       let className = `_relation_${obj.path[0]}_${this.relationName}`
       let key = obj.path[1]
@@ -47,7 +46,7 @@ export class Relation {
   remove (objs: WdObject[] | WdObject): Promise<any> {
     let path = this.path.join('/')
     objs = toArray(objs)
-    
+
     return Promise.all()
   }
 

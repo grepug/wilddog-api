@@ -1,8 +1,8 @@
 // import { WilddogApi } from '../dist/wilddog-api'
 
-const {WilddogApi} = require('../dist/index')
+// const WilddogApi = require('../dist/index')
 
-// import { WilddogApi } from '../src/index'
+import { WilddogApi } from '../src/index'
 
 let api = new WilddogApi({
   syncURL: 'https://aiyuke-t.wilddogio.com',

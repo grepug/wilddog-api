@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var index_1 = require("./index");
+var _ = require("lodash");
 var WdObject = (function () {
     function WdObject(path, val, wilddog) {
         this.path = path;
@@ -13,7 +14,21 @@ var WdObject = (function () {
     WdObject.prototype.get = function (key) {
         return this.val[key];
     };
+    WdObject.prototype.push = function (obj) {
+        if (this.path.length === 1) {
+            _.extend(obj, {
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime()
+            });
+        }
+        return this.wilddog.sync.ref(this.pathStr).push(obj);
+    };
     WdObject.prototype.save = function (obj) {
+        if (this.path.length === 2) {
+            _.extend(obj, {
+                updatedAt: new Date().getTime()
+            });
+        }
         return this.wilddog.sync.ref(this.pathStr).update(obj);
     };
     WdObject.prototype.remove = function () {
