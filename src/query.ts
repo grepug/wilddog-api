@@ -1,5 +1,7 @@
 import { WilddogApi } from './index'
 
+declare const Promise
+
 export class Query {
 
   private wilddog: WilddogApi
@@ -13,15 +15,18 @@ export class Query {
   ) {
     this.path = path
     this.wilddog = wilddog
-    this.sync = this.wilddog.sync()
+    this.sync = this.wilddog.sync
   }
 
-  equalTo () {
-    let path = this.path.join('/')
-    this.sync.ref(path).orderByKey().equalTo()
+  equalTo (key, val): Promise<Object> {
+    return new Promise((resolve) => {
+      let path = this.path.join('/')
+      this.sync.ref(path).orderByChild(key).equalTo(val).once('value', ss => {
+        let key = ss.key()
+        let val = ss.val()
+        resolve({ key, val })
+      })
+    })
   }
 
 }
-
-
-WA.Query()
