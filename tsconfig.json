@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-        "module": "amd",
+        "module": "commonjs",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "outFile": "dist/wilddog-api.amd.js",
-        "sourceMap": true
+        "sourceMap": true,
+        "outDir": "dist"
     },
     "include": [
         "src/**/*"
