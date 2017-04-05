@@ -26,20 +26,14 @@ export class WilddogApi {
     return this
   }
 
-  public query (className: string): Promise<WdObject> {
-    return new Promise((resolve, reject) => {
-      let path = className
-      let ref = this.sync(path).once('value', ss => {
-        let val = ss.val()
-        let key = ss.key()
-        let wdObject = new WdObject(key, val)
-        resolve(wdObject)
-      })
-    })
+  public Query (path: string[]) {
+    return new Query({ path, wilddog: this })
   }
 
-  public Query (path: string[]) {
-    return new Query(this, path)
+  public Object (path: string[]) {
+    // return this.Query(path).find()
+    // .then()
+    return new WdObject(path, null, this)
   }
 
 
