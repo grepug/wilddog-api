@@ -31,8 +31,6 @@ export class WilddogApi {
   }
 
   public Object (path: string[]) {
-    // return this.Query(path).find()
-    // .then()
     return new WdObject(path, null, this)
   }
 

@@ -1,4 +1,5 @@
 import { WilddogApi, Relation } from './index'
+import _ = require('lodash')
 
 export class WdObject {
 
@@ -27,6 +28,7 @@ export class WdObject {
   }
 
   save (obj: Object): Promise<any> {
+    _.extend(obj, {  })
     return this.wilddog.sync.ref(this.pathStr).update(obj)
   }
 
