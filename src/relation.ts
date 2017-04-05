@@ -44,8 +44,11 @@ export class Relation {
     return Promise.all(promises)
   }
 
-  remove () {
-
+  remove (objs: WdObject[] | WdObject): Promise<any> {
+    let path = this.path.join('/')
+    objs = toArray(objs)
+    
+    return Promise.all()
   }
 
   query (): Query {

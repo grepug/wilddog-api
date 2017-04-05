@@ -26,8 +26,12 @@ export class WdObject {
     return this.val[key]
   }
 
-  save (obj: Object) {
+  save (obj: Object): Promise<any> {
     return this.wilddog.sync.ref(this.pathStr).update(obj)
+  }
+
+  remove (): Promise<any> {
+    return this.wilddog.sync.ref(this.pathStr).remove()
   }
 
   relation (relationClassName: string, relationName: string): Relation {
