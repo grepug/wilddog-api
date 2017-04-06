@@ -73,6 +73,11 @@ Query
 
 ### 方法
 
-wdApi.Object().push(obj: Object): Promise
+#### wdApi.Object(string[]).push(obj: Object): Promise
 
-wdApi.Object().add(obj: Object)
+内部使用wilddog.sync().ref().push()在该路径下插入一个节点
+
+
+#### wdApi.Object(string[]).save(obj: Object): Promise
+
+内部使用wilddog.sync().ref().update()对该路径下的节点更新
