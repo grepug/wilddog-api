@@ -21,7 +21,8 @@ var WdObject = (function () {
                 updatedAt: new Date().getTime()
             });
         }
-        return this.wilddog.sync.ref(this.pathStr).push(obj);
+        var res = this.wilddog.sync.ref(this.pathStr).push(obj);
+        return this.wilddog.Object(this.path.concat([res.key()]));
     };
     WdObject.prototype.save = function (obj) {
         if (this.path.length === 2) {

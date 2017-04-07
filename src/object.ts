@@ -27,14 +27,15 @@ export class WdObject {
     return this.val[key]
   }
 
-  push (obj: Object): Promise<any> {
+  push (obj: Object): WdObject {
     if (this.path.length === 1) {
       _.extend(obj, {
         createdAt: new Date().getTime(),
         updatedAt: new Date().getTime()
       })
     }
-    return this.wilddog.sync.ref(this.pathStr).push(obj)
+    let res = this.wilddog.sync.ref(this.pathStr).push(obj)
+    return this.wilddog.Object(this.path.concat([res.key()]))
   }
 
   save (obj: Object): Promise<any> {

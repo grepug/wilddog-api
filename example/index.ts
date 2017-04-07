@@ -14,7 +14,7 @@ api.init()
 api.Object(['Subtournament']).push({
   nihao: 'hi'
 })
-.then(ret => console.log(ret))
+// .then(ret => console.log(ret))
 
 // api.Query(['User'])
 // .equalTo('displayName', 'GrePuG')
