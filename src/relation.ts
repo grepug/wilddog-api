@@ -33,6 +33,8 @@ export class Relation extends WilddogApi {
   add (objs: WdObject[] | WdObject): Promise<WdObject[]> {
     objs = toArray(objs)
     let promises = objs.map(obj => {
+      console.log(obj);
+      
       let className = `_relation_${obj.path[0]}_${this.relationName}`
       let key = obj.path[1]
       return this.object.child([className]).push(key)

@@ -16,7 +16,10 @@ api.Object('Subtournament').push({
 .then(sub => {
   return sub.relation('Tournament', 'tournament')
   .add(
-    api.Object(['Tournament', '-Kh5rrb0DZPJCTJPlS_e'])
+    [
+      api.Object(['Tournament', '-Kh5rrb0DZPJCTJPlS_e']),
+      api.Object(['Tournament', '123'])
+    ]
   )
 })
 .then(ret => {

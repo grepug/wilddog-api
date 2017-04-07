@@ -22,9 +22,9 @@ export class WilddogApi {
     return this.checkIfInited() && new Query(queryOptions, this)
   }
 
-  public Object (objOptions: ObjectOptions | string): WdObject {
+  public Object (objOptions: ObjectOptions | string | string[]): WdObject {
     if (!this.checkIfInited()) return
-    if (typeof objOptions === 'string') {
+    if (typeof objOptions === 'string' || Array.isArray(objOptions)) {
       return new WdObject({ path: objOptions }, this)
     }
     return new WdObject(objOptions, this)
