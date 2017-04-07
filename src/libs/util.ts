@@ -17,3 +17,8 @@ export function isArray (obj: any): Boolean {
 export function isObject (obj: any): Boolean {
   return Object.prototype.toString.call(obj) === '[object Object]'
 }
+
+export function getPath (str: string): string[] {
+  let reg = new RegExp('^https\:\/\/[0-9a-z\.]+\.com\/')
+  return str.replace(reg, '').split('/')
+}

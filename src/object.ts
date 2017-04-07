@@ -1,4 +1,5 @@
 import { WilddogApi, Relation, Query } from './index'
+import { getPath } from './libs/util'
 import wilddog = require('wilddog')
 import _ = require('lodash')
 
@@ -22,10 +23,10 @@ export class WdObject {
   constructor (
     options: ObjectOptions
   ) {
-    this.path = options.path
     this.val = options.val
     this.wilddog = options.wilddog
     this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'))
+    this.path = options.ref ? getPath(options.ref.toString()) : options.path
   }
 
   set (obj: Object): Promise<WdObject> {
