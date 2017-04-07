@@ -2,7 +2,7 @@ import wilddog = require('wilddog')
 
 export class Wilddog {
 
-  protected wilddog: any
-  protected sync: wilddog.sync.sync
+  app: wilddog.app.App
+  sync: wilddog.sync.sync
 
 }

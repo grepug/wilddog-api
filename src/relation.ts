@@ -12,7 +12,7 @@ interface RelationOptions {
   object: WdObject
 }
 
-export class Relation extends Wilddog {
+export class Relation extends WilddogApi {
 
   private className: string
   private path: string[] | string
@@ -47,7 +47,7 @@ export class Relation extends Wilddog {
   }
 
   query (): Query {
-    return new Query({
+    return this.Query({
       path: this.path,
       relationClassName: this.relationClassName,
       relationName: this.relationName,

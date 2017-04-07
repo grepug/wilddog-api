@@ -5,26 +5,28 @@ import _ = require('lodash')
 
 declare const Promise: any
 
-interface ObjectOptions {
+export interface ObjectOptions {
   path?: string[] | string,
   val?: any,
   ref?: wilddog.sync.Reference,
 }
 
-export class WdObject extends Wilddog {
+export class WdObject {
 
   public path: string[] | string
   public val: any
   private pathStr: string
   private ref: wilddog.sync.Reference
+  private wd: WilddogApi
 
   constructor (
-    options: ObjectOptions
+    options: ObjectOptions,
+    wd: WilddogApi
   ) {
-    super()
+    this.wd = wd
     this.val = options.val
     this.path = options.ref ? getPath(options.ref.toString()) : options.path
-    this.ref = options.ref ? options.ref : this.sync.ref(makePath(this.path))
+    this.ref = options.ref ? options.ref : this.wd.sync.ref(makePath(this.path))
   }
 
   async set (obj: Object): Promise<WdObject> {
@@ -34,13 +36,13 @@ export class WdObject extends Wilddog {
   }
 
   get (key: string): Promise<WdObject> {
-    return new Query({ path: this.path }).get(key)
+    return this.wd.Query({ path: this.path }).get(key)
   }
 
   async push (obj: Object): Promise<WdObject> {
     obj = this.setCreatedAndUpdated(obj)
     let ref: wilddog.sync.Reference = await this.ref.push(obj)
-    return new WdObject({ ref })
+    return this.wd.Object({ ref })
   }
 
   async save (obj: Object): Promise<WdObject> {
@@ -59,7 +61,7 @@ export class WdObject extends Wilddog {
 
   child (childPath: string[]): WdObject {
     let childPathStr: string = makePath(childPath)
-    return new WdObject({ ref: this.ref.child(childPathStr) })
+    return this.wd.Object({ ref: this.ref.child(childPathStr) })
   }
 
   relation (relationClassName: string, relationName: string): Relation {

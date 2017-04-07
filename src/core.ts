@@ -1,21 +1,41 @@
 import wilddog = require('wilddog')
-import { Query, WdObject, Wilddog } from './index'
+import {
+  Query,
+  QueryOptions,
+  WdObject,
+  ObjectOptions,
+} from './index'
 import { makePath } from './libs/util'
 
-export class WilddogApi extends Wilddog {
+export class WilddogApi {
+
+  app: wilddog.app.App
+  sync: wilddog.sync.sync
 
   public init (config: any): WilddogApi {
-    this.wilddog = wilddog.initializeApp(config)
-    this.sync = this.wilddog.sync()
+    this.app = wilddog.initializeApp(config)
+    this.sync = this.app.sync()
     return this
   }
 
-  public Query (path: string[]): Query {
-    return new Query({ path })
+  public Query (queryOptions: QueryOptions): Query {
+    return this.checkIfInited() && new Query(queryOptions, this)
   }
 
-  public Object (path: string[] | string): WdObject {
-    return new WdObject({ ref: this.sync.ref(makePath(path)) })
+  public Object (objOptions: ObjectOptions | string): WdObject {
+    if (!this.checkIfInited()) return
+    if (typeof objOptions === 'string') {
+      return new WdObject({ path: objOptions }, this)
+    }
+    return new WdObject(objOptions, this)
+  }
+
+  private checkIfInited () {
+    if (!this.app) {
+      console.error('not initialized!')
+      return false
+    }
+    return true
   }
 
 }
