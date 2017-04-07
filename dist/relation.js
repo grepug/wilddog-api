@@ -1,35 +1,43 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
 var index_1 = require("./index");
 var util_1 = require("./libs/util");
-var Relation = (function () {
+var Relation = (function (_super) {
+    __extends(Relation, _super);
     function Relation(options) {
-        this.wilddog = options.wilddog;
-        this.path = options.path;
-        this.relationName = options.relationName;
-        this.relationClassName = options.relationClassName;
-        this.object = options.object;
+        var _this = _super.call(this) || this;
+        _this.path = options.path;
+        _this.relationName = options.relationName;
+        _this.relationClassName = options.relationClassName;
+        _this.object = options.object;
+        return _this;
     }
     Relation.prototype.add = function (objs) {
         var _this = this;
-        var path = this.path.join('/');
         objs = util_1.toArray(objs);
         var promises = objs.map(function (obj) {
             var className = "_relation_" + obj.path[0] + "_" + _this.relationName;
             var key = obj.path[1];
-            return _this.object.save((_a = {}, _a[className] = [key], _a));
-            var _a;
+            return _this.object.child([className]).push(key);
         });
         return Promise.all(promises);
     };
     Relation.prototype.remove = function (objs) {
-        var path = this.path.join('/');
         objs = util_1.toArray(objs);
         return Promise.all();
     };
     Relation.prototype.query = function () {
         return new index_1.Query({
-            wilddog: this.wilddog,
             path: this.path,
             relationClassName: this.relationClassName,
             relationName: this.relationName,
@@ -37,6 +45,6 @@ var Relation = (function () {
         });
     };
     return Relation;
-}());
+}(index_1.Wilddog));
 exports.Relation = Relation;
 //# sourceMappingURL=relation.js.map

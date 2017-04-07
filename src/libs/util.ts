@@ -21,3 +21,7 @@ export function isObject (obj: any): Boolean {
 export function getPath (str: string): string[] {
   return str.replace(/^https\:\/\/[0-9a-z\.\-]+\.com\//, '').split('/')
 }
+
+export function makePath (p: string | string[]): string {
+  return Array.isArray(p) ? p.join('/') : p
+}

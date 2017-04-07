@@ -1,20 +1,19 @@
 import { Wilddog, WilddogApi, Relation, Query } from './index'
-import { getPath } from './libs/util'
+import { getPath, makePath } from './libs/util'
 import wilddog = require('wilddog')
 import _ = require('lodash')
 
 declare const Promise: any
 
 interface ObjectOptions {
-  path?: string[],
+  path?: string[] | string,
   val?: any,
-  // ref?: wilddog.sync.Reference,
-  wilddog: WilddogApi,
+  ref?: wilddog.sync.Reference,
 }
 
 export class WdObject extends Wilddog {
 
-  public path: string[]
+  public path: string[] | string
   public val: any
   private pathStr: string
   private ref: wilddog.sync.Reference
@@ -24,51 +23,47 @@ export class WdObject extends Wilddog {
   ) {
     super()
     this.val = options.val
-    // this.wilddog = options.wilddog
     this.path = options.ref ? getPath(options.ref.toString()) : options.path
-    this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'))
+    this.ref = options.ref ? options.ref : this.sync.ref(makePath(this.path))
   }
 
-  set (obj: Object): Promise<WdObject> {
+  async set (obj: Object): Promise<WdObject> {
     obj = this.setCreatedAndUpdated(obj)
-    return this.ref.set(obj)
-    .then(() => Promise.resolve(this))
+    await this.ref.set(obj)
+    return this
   }
 
   get (key: string): Promise<WdObject> {
-    return new Query({ path: this.path, wilddog: this.wilddog }).get(key)
+    return new Query({ path: this.path }).get(key)
   }
 
-  push (obj: Object): Promise<WdObject> {
+  async push (obj: Object): Promise<WdObject> {
     obj = this.setCreatedAndUpdated(obj)
-    return this.ref.push(obj)
-    .then((ref: wilddog.sync.Reference) => Promise.resolve(
-      new WdObject({ ref, wilddog: this.wilddog })
-    ))
+    let ref: wilddog.sync.Reference = await this.ref.push(obj)
+    return new WdObject({ ref })
   }
 
-  save (obj: Object): Promise<WdObject> {
+  async save (obj: Object): Promise<WdObject> {
     if (this.path.length === 2) {
       _.extend(obj, {
         updatedAt: new Date().getTime()
       })
     }
-    return this.ref.update(obj)
-    .then(() => Promise.resolve(this))
+    await this.ref.update(obj)
+    return this
   }
 
-  remove (): Promise<any> {
-    return this.ref.remove()
-  }
+  // remove (): Promise<any> {
+  //   return this.ref.remove()
+  // }
 
   child (childPath: string[]): WdObject {
-    let childPathStr: string = childPath.join('/')
-    return new WdObject({ ref: this.ref.child(childPathStr), wilddog: this.wilddog })
+    let childPathStr: string = makePath(childPath)
+    return new WdObject({ ref: this.ref.child(childPathStr) })
   }
 
   relation (relationClassName: string, relationName: string): Relation {
     return new Relation({
-      wilddog: this.wilddog,
       path: this.path,
       relationName,
       relationClassName,

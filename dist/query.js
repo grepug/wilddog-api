@@ -1,4 +1,14 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -38,26 +48,27 @@ exports.__esModule = true;
 var index_1 = require("./index");
 var util_1 = require("./libs/util");
 var _ = require("lodash");
-var Query = (function () {
+var Query = (function (_super) {
+    __extends(Query, _super);
     function Query(options) {
-        this.isRelation = false;
-        this.queryObj = {};
-        this.path = options.path;
-        this.wilddog = options.wilddog;
-        this.sync = this.wilddog.sync;
-        this.relationClassName = options.relationClassName;
-        this.relationName = options.relationName;
-        this.isRelation = !!options.isRelation;
+        var _this = _super.call(this) || this;
+        _this.isRelation = false;
+        _this.queryObj = {};
+        _this.path = options.path;
+        _this.ref = options.ref ? options.ref : _this.sync.ref(util_1.makePath(_this.path));
+        _this.relationClassName = options.relationClassName;
+        _this.relationName = options.relationName;
+        _this.isRelation = !!options.isRelation;
+        return _this;
     }
     Query.prototype.get = function (key) {
         var _this = this;
         return new Promise(function (resolve) {
-            var path = _this.path.join('/');
-            var ref = _this.sync.ref(path).orderByChild(key);
-            ref.once('value', function (ss) {
+            var query = _this.ref.orderByChild(key);
+            query.once('value', function (ss) {
                 var key = ss.key();
                 var val = ss.val();
-                var wdObject = new index_1.WdObject({ path: _this.path, val: val, wilddog: _this.wilddog });
+                var wdObject = new index_1.WdObject({ ref: _this.ref, val: val });
                 resolve(wdObject);
             });
         });
@@ -75,8 +86,8 @@ var Query = (function () {
         var _this = this;
         if (this.isRelation) {
             var relationName = "_relation_" + this.relationClassName + "_" + this.relationName;
-            util_1.log(this.path.concat([relationName]));
-            return this.wilddog.Query(this.path.concat([relationName])).first()
+            var ref = this.ref.child(relationName);
+            return new Query({ ref: ref }).first()
                 .then(function (res) {
                 var keys = res.val;
                 var p = _.map(keys, function (key) {
@@ -86,15 +97,14 @@ var Query = (function () {
             });
         }
         return new Promise(function (resolve) {
-            var path = _this.path.join('/');
-            var ref = _this.sync.ref(path);
+            var ref = _this.ref;
             if (_this.queryObj.equalTo) {
-                ref = ref.orderByChild(_this.queryObj.equalTo.key);
+                ref = _this.ref.orderByChild(_this.queryObj.equalTo.key);
             }
             ref.once('value', function (ss) {
                 var key = ss.key();
                 var val = ss.val();
-                var wdObject = new index_1.WdObject({ path: _this.path, val: val, wilddog: _this.wilddog });
+                var wdObject = new index_1.WdObject({ ref: _this.ref, val: val });
                 resolve([wdObject]);
             });
         });
@@ -111,19 +121,18 @@ var Query = (function () {
     };
     Query.prototype.on = function (method, cb) {
         var _this = this;
-        var path = this.path.join('/');
-        var ref = this.sync.ref(path);
+        var ref = this.ref;
         if (this.queryObj.equalTo) {
             ref = ref.orderByChild(this.queryObj.equalTo.key);
         }
         ref.on(method, function (ss) {
             var key = ss.key();
             var val = ss.val();
-            var wdObject = new index_1.WdObject({ path: _this.path, val: val, wilddog: _this.wilddog });
+            var wdObject = new index_1.WdObject({ ref: _this.ref, val: val });
             cb(wdObject);
         });
     };
     return Query;
-}());
+}(index_1.Wilddog));
 exports.Query = Query;
 //# sourceMappingURL=query.js.map

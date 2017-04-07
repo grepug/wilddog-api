@@ -1,4 +1,4 @@
-import { WilddogApi, Query, WdObject } from './index'
+import { Wilddog, WilddogApi, Query, WdObject } from './index'
 import {
   toArray
 } from './libs/util'
@@ -6,18 +6,16 @@ import {
 declare const Promise: any
 
 interface RelationOptions {
-  wilddog: WilddogApi,
-  path: string[],
+  path: string[] | string,
   relationName: string,
   relationClassName: string,
   object: WdObject
 }
 
-export class Relation {
+export class Relation extends Wilddog {
 
   private className: string
-  private wilddog: WilddogApi
-  private path: string[]
+  private path: string[] | string
   private relationName: string
   private relationClassName: string
   private object: WdObject
@@ -25,7 +23,7 @@ export class Relation {
   constructor (
     options: RelationOptions
   ) {
-    this.wilddog = options.wilddog
+    super()
     this.path = options.path
     this.relationName = options.relationName
     this.relationClassName = options.relationClassName
@@ -33,7 +31,6 @@ export class Relation {
   }
 
   add (objs: WdObject[] | WdObject): Promise<WdObject[]> {
-    let path = this.path.join('/')
     objs = toArray(objs)
     let promises = objs.map(obj => {
       let className = `_relation_${obj.path[0]}_${this.relationName}`
@@ -44,7 +41,6 @@ export class Relation {
   }
 
   remove (objs: WdObject[] | WdObject): Promise<any> {
-    let path = this.path.join('/')
     objs = toArray(objs)
 
     return Promise.all()
@@ -52,7 +48,6 @@ export class Relation {
 
   query (): Query {
     return new Query({
-      wilddog: this.wilddog,
       path: this.path,
       relationClassName: this.relationClassName,
       relationName: this.relationName,

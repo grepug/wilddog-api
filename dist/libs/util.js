@@ -24,4 +24,8 @@ function getPath(str) {
     return str.replace(/^https\:\/\/[0-9a-z\.\-]+\.com\//, '').split('/');
 }
 exports.getPath = getPath;
+function makePath(p) {
+    return Array.isArray(p) ? p.join('/') : p;
+}
+exports.makePath = makePath;
 //# sourceMappingURL=util.js.map

@@ -8,4 +8,6 @@ var query_1 = require("./query");
 exports.Query = query_1.Query;
 var relation_1 = require("./relation");
 exports.Relation = relation_1.Relation;
+var wilddog_1 = require("./wilddog");
+exports.Wilddog = wilddog_1.Wilddog;
 //# sourceMappingURL=index.js.map
