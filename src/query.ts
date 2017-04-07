@@ -1,4 +1,5 @@
 import { WilddogApi, WdObject } from './index'
+import wilddog = require('wilddog')
 import {
   toArray,
   warn,
@@ -50,14 +51,14 @@ export class Query {
     this.isRelation = !!options.isRelation
   }
 
-  get (key: string): Promise<any> {
+  get (key: string): Promise<WdObject> {
     return new Promise((resolve: Function) => {
       let path = this.path.join('/')
       let ref = this.sync.ref(path).orderByChild(key)
-      ref.once('value', (ss: any) => {
+      ref.once('value', (ss: wilddog.sync.DataSnapshot) => {
         let key = ss.key()
         let val = ss.val()
-        let wdObject = new WdObject(this.path, val, this.wilddog)
+        let wdObject = new WdObject({ path: this.path, val, wilddog: this.wilddog })
         resolve(wdObject)
       })
 
@@ -92,10 +93,10 @@ export class Query {
       if (this.queryObj.equalTo) {
         ref = ref.orderByChild(this.queryObj.equalTo.key)
       }
-      ref.once('value', (ss: any) => {
+      ref.once('value', (ss: wilddog.sync.DataSnapshot) => {
         let key = ss.key()
         let val = ss.val()
-        let wdObject = new WdObject(this.path, val, this.wilddog)
+        let wdObject = new WdObject({ path: this.path, val, wilddog: this.wilddog })
         resolve([wdObject])
       })
     })
@@ -111,10 +112,10 @@ export class Query {
     if (this.queryObj.equalTo) {
       ref = ref.orderByChild(this.queryObj.equalTo.key)
     }
-    ref.on(method, (ss: any) => {
+    ref.on(method, (ss: wilddog.sync.DataSnapshot) => {
       let key = ss.key()
       let val = ss.val()
-      let wdObject = new WdObject(this.path, val, this.wilddog)
+      let wdObject = new WdObject({ path: this.path, val, wilddog: this.wilddog })
       cb(wdObject)
     })
   }

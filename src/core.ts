@@ -31,7 +31,8 @@ export class WilddogApi {
   }
 
   public Object (path: string[]) {
-    return new WdObject(path, null, this)
+    // return new WdObject(path, null, this)
+    return new WdObject({ path, wilddog: this})
   }
 
 

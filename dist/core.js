@@ -15,7 +15,7 @@ var WilddogApi = (function () {
         return new index_1.Query({ path: path, wilddog: this });
     };
     WilddogApi.prototype.Object = function (path) {
-        return new index_1.WdObject(path, null, this);
+        return new index_1.WdObject({ path: path, wilddog: this });
     };
     return WilddogApi;
 }());

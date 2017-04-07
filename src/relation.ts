@@ -32,13 +32,13 @@ export class Relation {
     this.object = options.object
   }
 
-  add (objs: WdObject[] | WdObject): Promise<any> {
+  add (objs: WdObject[] | WdObject): Promise<WdObject[]> {
     let path = this.path.join('/')
     objs = toArray(objs)
     let promises = objs.map(obj => {
       let className = `_relation_${obj.path[0]}_${this.relationName}`
       let key = obj.path[1]
-      this.object.save({ [className]: [key] })
+      return this.object.save({ [className]: [key] })
     })
     return Promise.all(promises)
   }

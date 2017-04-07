@@ -57,7 +57,7 @@ var Query = (function () {
             ref.once('value', function (ss) {
                 var key = ss.key();
                 var val = ss.val();
-                var wdObject = new index_1.WdObject(_this.path, val, _this.wilddog);
+                var wdObject = new index_1.WdObject({ path: _this.path, val: val, wilddog: _this.wilddog });
                 resolve(wdObject);
             });
         });
@@ -94,7 +94,7 @@ var Query = (function () {
             ref.once('value', function (ss) {
                 var key = ss.key();
                 var val = ss.val();
-                var wdObject = new index_1.WdObject(_this.path, val, _this.wilddog);
+                var wdObject = new index_1.WdObject({ path: _this.path, val: val, wilddog: _this.wilddog });
                 resolve([wdObject]);
             });
         });
@@ -119,7 +119,7 @@ var Query = (function () {
         ref.on(method, function (ss) {
             var key = ss.key();
             var val = ss.val();
-            var wdObject = new index_1.WdObject(_this.path, val, _this.wilddog);
+            var wdObject = new index_1.WdObject({ path: _this.path, val: val, wilddog: _this.wilddog });
             cb(wdObject);
         });
     };

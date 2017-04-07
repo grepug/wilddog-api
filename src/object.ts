@@ -1,54 +1,63 @@
-import { WilddogApi, Relation } from './index'
+import { WilddogApi, Relation, Query } from './index'
+import wilddog = require('wilddog')
 import _ = require('lodash')
+
+declare const Promise: any
+
+interface ObjectOptions {
+  path?: string[],
+  val?: any,
+  ref?: wilddog.sync.Reference,
+  wilddog: WilddogApi,
+}
 
 export class WdObject {
 
   public path: string[]
-  private pathStr: string
   public val: any
+  private pathStr: string
   private wilddog: WilddogApi
+  private ref: wilddog.sync.Reference
 
   constructor (
-    path: Array<string>,
-    val: any,
-    wilddog: WilddogApi
+    options: ObjectOptions
   ) {
-    this.path = path
-    this.pathStr = path.join('/')
-    this.val = val
-    this.wilddog = wilddog
+    this.path = options.path
+    this.val = options.val
+    this.wilddog = options.wilddog
+    this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'))
   }
 
-  set () {
-
+  set (obj: Object): Promise<WdObject> {
+    obj = this.setCreatedAndUpdated(obj)
+    return this.ref.set(obj)
+    .then(() => Promise.resolve(this))
   }
 
-  get (key: string) {
-    return this.val[key]
+  get (key: string): Promise<WdObject> {
+    return new Query({ path: this.path, wilddog: this.wilddog }).get(key)
   }
 
-  push (obj: Object): WdObject {
-    if (this.path.length === 1) {
-      _.extend(obj, {
-        createdAt: new Date().getTime(),
-        updatedAt: new Date().getTime()
-      })
-    }
-    let res = this.wilddog.sync.ref(this.pathStr).push(obj)
-    return this.wilddog.Object(this.path.concat([res.key()]))
+  push (obj: Object): Promise<WdObject> {
+    obj = this.setCreatedAndUpdated(obj)
+    return this.ref.push(obj)
+    .then((ref: wilddog.sync.Reference) => Promise.resolve(
+      new WdObject({ ref, wilddog: this.wilddog })
+    ))
   }
 
-  save (obj: Object): Promise<any> {
+  save (obj: Object): Promise<WdObject> {
     if (this.path.length === 2) {
       _.extend(obj, {
         updatedAt: new Date().getTime()
       })
     }
-    return this.wilddog.sync.ref(this.pathStr).update(obj)
+    return this.ref.update(obj)
+    .then(() => Promise.resolve(this))
   }
 
   remove (): Promise<any> {
-    return this.wilddog.sync.ref(this.pathStr).remove()
+    return this.ref.remove()
   }
 
   relation (relationClassName: string, relationName: string): Relation {
@@ -61,6 +70,18 @@ export class WdObject {
     })
   }
 
+  key (): string {
+    return this.ref.key()
+  }
 
+  private setCreatedAndUpdated (obj: Object): Object {
+    if (this.path.length === 1) {
+      return _.extend(obj, {
+        createdAt: new Date().getTime(),
+        updatedAt: new Date().getTime()
+      })
+    }
+    return obj
+  }
 
 }

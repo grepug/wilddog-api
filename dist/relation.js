@@ -17,7 +17,7 @@ var Relation = (function () {
         var promises = objs.map(function (obj) {
             var className = "_relation_" + obj.path[0] + "_" + _this.relationName;
             var key = obj.path[1];
-            _this.object.save((_a = {}, _a[className] = [key], _a));
+            return _this.object.save((_a = {}, _a[className] = [key], _a));
             var _a;
         });
         return Promise.all(promises);
