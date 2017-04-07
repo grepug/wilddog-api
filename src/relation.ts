@@ -38,7 +38,7 @@ export class Relation {
     let promises = objs.map(obj => {
       let className = `_relation_${obj.path[0]}_${this.relationName}`
       let key = obj.path[1]
-      return this.object.save({ [className]: [key] })
+      return this.object.child([className]).push(key)
     })
     return Promise.all(promises)
   }

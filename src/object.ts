@@ -1,4 +1,4 @@
-import { WilddogApi, Relation, Query } from './index'
+import { Wilddog, WilddogApi, Relation, Query } from './index'
 import { getPath } from './libs/util'
 import wilddog = require('wilddog')
 import _ = require('lodash')
@@ -8,23 +8,23 @@ declare const Promise: any
 interface ObjectOptions {
   path?: string[],
   val?: any,
-  ref?: wilddog.sync.Reference,
+  // ref?: wilddog.sync.Reference,
   wilddog: WilddogApi,
 }
 
-export class WdObject {
+export class WdObject extends Wilddog {
 
   public path: string[]
   public val: any
   private pathStr: string
-  private wilddog: WilddogApi
   private ref: wilddog.sync.Reference
 
   constructor (
     options: ObjectOptions
   ) {
+    super()
     this.val = options.val
-    this.wilddog = options.wilddog
+    // this.wilddog = options.wilddog
     this.path = options.ref ? getPath(options.ref.toString()) : options.path
     this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'))
   }
@@ -59,6 +59,11 @@ export class WdObject {
 
   remove (): Promise<any> {
     return this.ref.remove()
+  }
+
+  child (childPath: string[]): WdObject {
+    let childPathStr: string = childPath.join('/')
+    return new WdObject({ ref: this.ref.child(childPathStr), wilddog: this.wilddog })
   }
 
   relation (relationClassName: string, relationName: string): Relation {

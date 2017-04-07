@@ -12,10 +12,10 @@ let api = new WilddogApi({
 
 api.init()
 
-let ref = api.wilddog.sync().ref('Subtournament')
-
-let obj = new WdObject({ ref, wilddog: api.wilddog })
-console.log(obj.path)
+// let ref = api.wilddog.sync().ref('Subtournament')
+//
+// let obj = new WdObject({ ref, wilddog: api.wilddog })
+// console.log(obj.path)
 
 // .then(ret => console.log(ret))
 
