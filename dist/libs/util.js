@@ -20,4 +20,9 @@ function isObject(obj) {
     return Object.prototype.toString.call(obj) === '[object Object]';
 }
 exports.isObject = isObject;
+function getPath(str) {
+    var reg = new RegExp('^https\:\/\/[0-9a-z\.]+\.com\/');
+    return str.replace(reg, '').split('/');
+}
+exports.getPath = getPath;
 //# sourceMappingURL=util.js.map

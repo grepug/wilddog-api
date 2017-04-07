@@ -1,13 +1,14 @@
 "use strict";
 exports.__esModule = true;
 var index_1 = require("./index");
+var util_1 = require("./libs/util");
 var _ = require("lodash");
 var WdObject = (function () {
     function WdObject(options) {
-        this.path = options.path;
         this.val = options.val;
         this.wilddog = options.wilddog;
         this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'));
+        this.path = options.ref ? util_1.getPath(options.ref.toString()) : options.path;
     }
     WdObject.prototype.set = function (obj) {
         var _this = this;
