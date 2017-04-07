@@ -7,8 +7,8 @@ var WdObject = (function () {
     function WdObject(options) {
         this.val = options.val;
         this.wilddog = options.wilddog;
-        this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'));
         this.path = options.ref ? util_1.getPath(options.ref.toString()) : options.path;
+        this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'));
     }
     WdObject.prototype.set = function (obj) {
         var _this = this;

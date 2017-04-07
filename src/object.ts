@@ -25,8 +25,8 @@ export class WdObject {
   ) {
     this.val = options.val
     this.wilddog = options.wilddog
-    this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'))
     this.path = options.ref ? getPath(options.ref.toString()) : options.path
+    this.ref = options.ref ? options.ref : this.wilddog.sync.ref(this.path.join('/'))
   }
 
   set (obj: Object): Promise<WdObject> {
