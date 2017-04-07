@@ -25,3 +25,7 @@ export function getPath (str: string): string[] {
 export function makePath (p: string | string[]): string {
   return Array.isArray(p) ? p.join('/') : p
 }
+
+export function toPathArr (p: string | string[]): string[] {
+  return Array.isArray(p) ? p : p.split('/')
+}

@@ -1,5 +1,5 @@
 import { Wilddog, WilddogApi, Relation, Query } from './index'
-import { getPath, makePath } from './libs/util'
+import { getPath, makePath, toPathArr } from './libs/util'
 import wilddog = require('wilddog')
 import _ = require('lodash')
 
@@ -13,7 +13,7 @@ export interface ObjectOptions {
 
 export class WdObject {
 
-  public path: string[] | string
+  public path: string[]
   public val: any
   private pathStr: string
   private ref: wilddog.sync.Reference
@@ -25,7 +25,7 @@ export class WdObject {
   ) {
     this.wd = wd
     this.val = options.val
-    this.path = options.ref ? getPath(options.ref.toString()) : options.path
+    this.path = options.ref ? getPath(options.ref.toString()) : toPathArr(options.path)
     this.ref = options.ref ? options.ref : this.wd.sync.ref(makePath(this.path))
   }
 
@@ -58,6 +58,13 @@ export class WdObject {
   // remove (): Promise<any> {
   //   return this.ref.remove()
   // }
+
+  async savePointer (targetClassName: string, pointerName: string, targetObj: WdObject): Promise<WdObject> {
+    if (this.path.length !== 2) throw new Error('save pointer must have a 2 length path')
+    let pointer = `_pointer_${targetClassName}_${pointerName}`
+    await this.ref.update({ [pointer]: targetObj.key() })
+    return this
+  }
 
   child (childPath: string[]): WdObject {
     let childPathStr: string = makePath(childPath)

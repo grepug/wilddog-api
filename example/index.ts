@@ -10,18 +10,21 @@ let api = new WilddogApi().init({
   authDomain: 'aiyuke-t.wilddog.com'
 })
 
-api.Object('Subtournament').push({
-  test: 'value'
-})
-.then(sub => {
-  return sub.relation('Tournament', 'tournament')
-  .add(
-    [
-      api.Object(['Tournament', '-Kh5rrb0DZPJCTJPlS_e']),
-      api.Object(['Tournament', '123'])
-    ]
-  )
-})
-.then(ret => {
-  console.log(ret)
-})
+// api.Object('Subtournament').push({
+//   test: 'value'
+// })
+// .then(sub => {
+//   return sub.relation('Tournament', 'tournament')
+//   .add(
+//     [
+//       api.Object(['Tournament', '-Kh5rrb0DZPJCTJPlS_e']),
+//       api.Object(['Tournament', '123'])
+//     ]
+//   )
+// })
+// .then(ret => {
+//   console.log(ret)
+// })
+
+api.Object('Subtournament/-Kh6dduWOlwa0o33I5Fq').savePointer('Tournament', 'tournament', api.Object(['Tournament', '-Kh5rrb0DZPJCTJPlS_e']))
+.then(ret => console.log(ret))
