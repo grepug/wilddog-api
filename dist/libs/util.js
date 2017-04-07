@@ -21,8 +21,7 @@ function isObject(obj) {
 }
 exports.isObject = isObject;
 function getPath(str) {
-    var reg = new RegExp('^https\:\/\/[0-9a-z\.]+\.com\/');
-    return str.replace(reg, '').split('/');
+    return str.replace(/^https\:\/\/[0-9a-z\.\-]+\.com\//, '').split('/');
 }
 exports.getPath = getPath;
 //# sourceMappingURL=util.js.map

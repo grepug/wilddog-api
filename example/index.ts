@@ -2,7 +2,8 @@
 
 // const WilddogApi = require('../dist/index')
 
-import { WilddogApi } from '../src/index'
+import { WilddogApi, WdObject } from '../src/index'
+// import wilddog = require('wilddog')
 
 let api = new WilddogApi({
   syncURL: 'https://aiyuke-t.wilddogio.com',
@@ -11,9 +12,11 @@ let api = new WilddogApi({
 
 api.init()
 
-api.Object(['Subtournament']).push({
-  nihao: 'hi'
-})
+let ref = api.wilddog.sync().ref('Subtournament')
+
+let obj = new WdObject({ ref, wilddog: api.wilddog })
+console.log(obj.path)
+
 // .then(ret => console.log(ret))
 
 // api.Query(['User'])

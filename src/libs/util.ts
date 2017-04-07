@@ -19,6 +19,5 @@ export function isObject (obj: any): Boolean {
 }
 
 export function getPath (str: string): string[] {
-  let reg = new RegExp('^https\:\/\/[0-9a-z\.]+\.com\/')
-  return str.replace(reg, '').split('/')
+  return str.replace(/^https\:\/\/[0-9a-z\.\-]+\.com\//, '').split('/')
 }
