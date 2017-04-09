@@ -4,5 +4,6 @@ export class Wilddog {
 
   app: wilddog.app.App
   sync: wilddog.sync.sync
+  auth: wilddog.auth.Auth
 
 }

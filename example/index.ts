@@ -29,5 +29,8 @@ let api = new WilddogApi().init({
 // api.Object('Subtournament/-Kh6dduWOlwa0o33I5Fq').savePointer('Tournament', 'tournament', api.Object(['Tournament', '-Kh5rrb0DZPJCTJPlS_e']))
 // .then(ret => console.log(ret))
 
-api.Query({ path: 'User' }).equalTo('admin', true).find()
-.then(ret => console.log(ret))
+// api.Query({ path: 'User' }).equalTo('admin', true).find()
+// .then(ret => console.log(ret))
+let User = api.User()
+User.loginWithEmail('grepug@163.com', '123456')
+console.log(User.current())

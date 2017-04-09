@@ -4,6 +4,7 @@ import {
   QueryOptions,
   WdObject,
   ObjectOptions,
+  User
 } from './index'
 import { makePath } from './libs/util'
 
@@ -11,10 +12,12 @@ export class WilddogApi {
 
   app: wilddog.app.App
   sync: wilddog.sync.sync
+  auth: wilddog.auth.Auth
 
   public init (config: any): WilddogApi {
     this.app = wilddog.initializeApp(config)
     this.sync = this.app.sync()
+    this.auth = this.app.auth()
     return this
   }
 
@@ -29,6 +32,10 @@ export class WilddogApi {
       return new WdObject({ path: objOptions }, this)
     }
     return new WdObject(objOptions, this)
+  }
+
+  User (): User {
+    return new User(this)
   }
 
   private checkIfInited () {
