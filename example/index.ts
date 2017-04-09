@@ -26,5 +26,8 @@ let api = new WilddogApi().init({
 //   console.log(ret)
 // })
 
-api.Object('Subtournament/-Kh6dduWOlwa0o33I5Fq').savePointer('Tournament', 'tournament', api.Object(['Tournament', '-Kh5rrb0DZPJCTJPlS_e']))
-.then(ret => console.log(ret))
+// api.Object('Subtournament/-Kh6dduWOlwa0o33I5Fq').savePointer('Tournament', 'tournament', api.Object(['Tournament', '-Kh5rrb0DZPJCTJPlS_e']))
+// .then(ret => console.log(ret))
+
+api.Query({ path: 'User' }).equalTo('admin', false).first()
+.then(ret => console.log(ret.val))

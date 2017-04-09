@@ -1,12 +1,13 @@
 {
   "name": "@grepug/wilddog-api",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node example/index.ts",
-    "publish": "tsc && npm publish --access public"
+    "publish": "tsc && npm publish --access public",
+    "test2": "ts-node example/index.ts"
   },
   "author": "GrePuG",
   "license": "ISC",

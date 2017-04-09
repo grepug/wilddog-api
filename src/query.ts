@@ -27,7 +27,7 @@ interface QueryObj {
 
 interface EqualTo {
   key: string,
-  val: string
+  val: string | number | boolean
 }
 
 export class Query {
@@ -45,12 +45,12 @@ export class Query {
     options: QueryOptions,
     wd: WilddogApi
   ) {
+    this.wd = wd
     this.path = options.path
     this.ref = options.ref ? options.ref : this.wd.sync.ref(makePath(this.path))
     this.relationClassName = options.relationClassName
     this.relationName = options.relationName
     this.isRelation = !!options.isRelation
-    this.wd = wd
   }
 
   get (key: string): Promise<WdObject> {
@@ -66,7 +66,7 @@ export class Query {
     })
   }
 
-  equalTo (key: string, val: string): Query {
+  equalTo (key: string, val: string | number | boolean): Query {
     if (this.isRelation) {
       warn('relation 暂不支持 equalTo')
     } else {
@@ -91,7 +91,7 @@ export class Query {
     return new Promise((resolve: any) => {
       let ref: wilddog.sync.Reference | wilddog.sync.Query = this.ref
       if (this.queryObj.equalTo) {
-        ref = this.ref.orderByChild(this.queryObj.equalTo.key)
+        ref = this.ref.orderByChild(this.queryObj.equalTo.key).equalTo(this.queryObj.equalTo.val)
       }
       ref.once('value', (ss: wilddog.sync.DataSnapshot) => {
         let key = ss.key()

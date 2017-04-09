@@ -19,6 +19,7 @@ export class WilddogApi {
   }
 
   public Query (queryOptions: QueryOptions): Query {
+    console.log(this)
     return this.checkIfInited() && new Query(queryOptions, this)
   }
 
