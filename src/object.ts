@@ -59,10 +59,11 @@ export class WdObject {
   //   return this.ref.remove()
   // }
 
-  async savePointer (targetClassName: string, pointerName: string, targetObj: WdObject): Promise<WdObject> {
+  async savePointer (targetClassName: string, pointerName: string, targetObj: WdObject | string): Promise<WdObject> {
     if (this.path.length !== 2) throw new Error('save pointer must have a 2 length path')
     let pointer = `_pointer_${targetClassName}_${pointerName}`
-    await this.ref.update({ [pointer]: targetObj.key() })
+    let key: string = _.isString(targetObj) ? targetObj : targetObj.key()
+    await this.ref.update({ [pointer]: key })
     return this
   }
 
