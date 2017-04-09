@@ -28,4 +28,8 @@ function makePath(p) {
     return Array.isArray(p) ? p.join('/') : p;
 }
 exports.makePath = makePath;
+function toPathArr(p) {
+    return Array.isArray(p) ? p : p.split('/');
+}
+exports.toPathArr = toPathArr;
 //# sourceMappingURL=util.js.map

@@ -1,14 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -45,21 +35,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var index_1 = require("./index");
 var util_1 = require("./libs/util");
 var _ = require("lodash");
-var Query = (function (_super) {
-    __extends(Query, _super);
-    function Query(options) {
-        var _this = _super.call(this) || this;
-        _this.isRelation = false;
-        _this.queryObj = {};
-        _this.path = options.path;
-        _this.ref = options.ref ? options.ref : _this.sync.ref(util_1.makePath(_this.path));
-        _this.relationClassName = options.relationClassName;
-        _this.relationName = options.relationName;
-        _this.isRelation = !!options.isRelation;
-        return _this;
+var Query = (function () {
+    function Query(options, wd) {
+        this.isRelation = false;
+        this.queryObj = {};
+        this.wd = wd;
+        this.path = options.path;
+        this.ref = options.ref ? options.ref : this.wd.sync.ref(util_1.makePath(this.path));
+        this.relationClassName = options.relationClassName;
+        this.relationName = options.relationName;
+        this.isRelation = !!options.isRelation;
     }
     Query.prototype.get = function (key) {
         var _this = this;
@@ -68,7 +55,7 @@ var Query = (function (_super) {
             query.once('value', function (ss) {
                 var key = ss.key();
                 var val = ss.val();
-                var wdObject = new index_1.WdObject({ ref: _this.ref, val: val });
+                var wdObject = _this.wd.Object({ ref: _this.ref, val: val });
                 resolve(wdObject);
             });
         });
@@ -87,11 +74,11 @@ var Query = (function (_super) {
         if (this.isRelation) {
             var relationName = "_relation_" + this.relationClassName + "_" + this.relationName;
             var ref = this.ref.child(relationName);
-            return new Query({ ref: ref }).first()
+            return this.wd.Query({ ref: ref }).first()
                 .then(function (res) {
                 var keys = res.val;
                 var p = _.map(keys, function (key) {
-                    return _this.wilddog.Query([_this.relationClassName]).get(key);
+                    return _this.wd.Query([_this.relationClassName]).get(key);
                 });
                 return Promise.all(p);
             });
@@ -99,12 +86,12 @@ var Query = (function (_super) {
         return new Promise(function (resolve) {
             var ref = _this.ref;
             if (_this.queryObj.equalTo) {
-                ref = _this.ref.orderByChild(_this.queryObj.equalTo.key);
+                ref = _this.ref.orderByChild(_this.queryObj.equalTo.key).equalTo(_this.queryObj.equalTo.val);
             }
             ref.once('value', function (ss) {
                 var key = ss.key();
                 var val = ss.val();
-                var wdObject = new index_1.WdObject({ ref: _this.ref, val: val });
+                var wdObject = _this.wd.Object({ ref: _this.ref, val: val });
                 resolve([wdObject]);
             });
         });
@@ -128,11 +115,11 @@ var Query = (function (_super) {
         ref.on(method, function (ss) {
             var key = ss.key();
             var val = ss.val();
-            var wdObject = new index_1.WdObject({ ref: _this.ref, val: val });
+            var wdObject = _this.wd.Object({ ref: _this.ref, val: val });
             cb(wdObject);
         });
     };
     return Query;
-}(index_1.Wilddog));
+}());
 exports.Query = Query;
 //# sourceMappingURL=query.js.map

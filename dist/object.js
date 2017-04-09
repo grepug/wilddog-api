@@ -1,14 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -48,14 +38,12 @@ exports.__esModule = true;
 var index_1 = require("./index");
 var util_1 = require("./libs/util");
 var _ = require("lodash");
-var WdObject = (function (_super) {
-    __extends(WdObject, _super);
-    function WdObject(options) {
-        var _this = _super.call(this) || this;
-        _this.val = options.val;
-        _this.path = options.ref ? util_1.getPath(options.ref.toString()) : options.path;
-        _this.ref = options.ref ? options.ref : _this.sync.ref(util_1.makePath(_this.path));
-        return _this;
+var WdObject = (function () {
+    function WdObject(options, wd) {
+        this.wd = wd;
+        this.val = options.val;
+        this.path = options.ref ? util_1.getPath(options.ref.toString()) : util_1.toPathArr(options.path);
+        this.ref = options.ref ? options.ref : this.wd.sync.ref(util_1.makePath(this.path));
     }
     WdObject.prototype.set = function (obj) {
         return __awaiter(this, void 0, void 0, function () {
@@ -72,7 +60,7 @@ var WdObject = (function (_super) {
         });
     };
     WdObject.prototype.get = function (key) {
-        return new index_1.Query({ path: this.path }).get(key);
+        return this.wd.Query({ path: this.path }).get(key);
     };
     WdObject.prototype.push = function (obj) {
         return __awaiter(this, void 0, void 0, function () {
@@ -84,7 +72,7 @@ var WdObject = (function (_super) {
                         return [4 /*yield*/, this.ref.push(obj)];
                     case 1:
                         ref = _a.sent();
-                        return [2 /*return*/, new WdObject({ ref: ref })];
+                        return [2 /*return*/, this.wd.Object({ ref: ref })];
                 }
             });
         });
@@ -107,9 +95,26 @@ var WdObject = (function (_super) {
             });
         });
     };
+    WdObject.prototype.savePointer = function (targetClassName, pointerName, targetObj) {
+        return __awaiter(this, void 0, void 0, function () {
+            var pointer, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (this.path.length !== 2)
+                            throw new Error('save pointer must have a 2 length path');
+                        pointer = "_pointer_" + targetClassName + "_" + pointerName;
+                        return [4 /*yield*/, this.ref.update((_a = {}, _a[pointer] = targetObj.key(), _a))];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/, this];
+                }
+            });
+        });
+    };
     WdObject.prototype.child = function (childPath) {
         var childPathStr = util_1.makePath(childPath);
-        return new WdObject({ ref: this.ref.child(childPathStr) });
+        return this.wd.Object({ ref: this.ref.child(childPathStr) });
     };
     WdObject.prototype.relation = function (relationClassName, relationName) {
         return new index_1.Relation({
@@ -132,6 +137,6 @@ var WdObject = (function (_super) {
         return obj;
     };
     return WdObject;
-}(index_1.Wilddog));
+}());
 exports.WdObject = WdObject;
 //# sourceMappingURL=object.js.map

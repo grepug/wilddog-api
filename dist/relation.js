@@ -26,6 +26,7 @@ var Relation = (function (_super) {
         var _this = this;
         objs = util_1.toArray(objs);
         var promises = objs.map(function (obj) {
+            console.log(obj);
             var className = "_relation_" + obj.path[0] + "_" + _this.relationName;
             var key = obj.path[1];
             return _this.object.child([className]).push(key);
@@ -37,7 +38,7 @@ var Relation = (function (_super) {
         return Promise.all();
     };
     Relation.prototype.query = function () {
-        return new index_1.Query({
+        return this.Query({
             path: this.path,
             relationClassName: this.relationClassName,
             relationName: this.relationName,
@@ -45,6 +46,6 @@ var Relation = (function (_super) {
         });
     };
     return Relation;
-}(index_1.Wilddog));
+}(index_1.WilddogApi));
 exports.Relation = Relation;
 //# sourceMappingURL=relation.js.map
