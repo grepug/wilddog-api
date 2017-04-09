@@ -91,8 +91,8 @@ var Query = (function () {
             ref.once('value', function (ss) {
                 var key = ss.key();
                 var val = ss.val();
-                var wdObject = _this.wd.Object({ ref: _this.ref, val: val });
-                resolve([wdObject]);
+                var wdObjects = _.map(val, function (v, k) { return _this.wd.Object({ ref: _this.ref, val: _.extend(v, { _objectId_: k }) }); });
+                resolve(wdObjects);
             });
         });
     };

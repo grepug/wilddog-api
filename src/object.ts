@@ -1,5 +1,5 @@
 import { Wilddog, WilddogApi, Relation, Query } from './index'
-import { getPath, makePath, toPathArr } from './libs/util'
+import { getPath, makePath, toPathArr, warn } from './libs/util'
 import wilddog = require('wilddog')
 import _ = require('lodash')
 
@@ -82,6 +82,14 @@ export class WdObject {
 
   key (): string {
     return this.ref.key()
+  }
+
+  toJSON (): any | null {
+    if (!this.val) {
+      warn('has no val')
+      return null
+    }
+    return _.map(this.val, (v, k) => _.extend(v, {_objectId_: k}))[0]
   }
 
   private setCreatedAndUpdated (obj: Object): Object {

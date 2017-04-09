@@ -96,8 +96,8 @@ export class Query {
       ref.once('value', (ss: wilddog.sync.DataSnapshot) => {
         let key = ss.key()
         let val = ss.val()
-        let wdObject = this.wd.Object({ ref: this.ref, val })
-        resolve([wdObject])
+        let wdObjects = _.map(val, (v, k) => this.wd.Object({ ref: this.ref, val: _.extend(v, { _objectId_: k }) }))
+        resolve(wdObjects)
       })
     })
   }

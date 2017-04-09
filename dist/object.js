@@ -127,6 +127,13 @@ var WdObject = (function () {
     WdObject.prototype.key = function () {
         return this.ref.key();
     };
+    WdObject.prototype.toJSON = function () {
+        if (!this.val) {
+            util_1.warn('has no val');
+            return null;
+        }
+        return _.map(this.val, function (v, k) { return _.extend(v, { _objectId_: k }); })[0];
+    };
     WdObject.prototype.setCreatedAndUpdated = function (obj) {
         if (this.path.length === 1) {
             return _.extend(obj, {
